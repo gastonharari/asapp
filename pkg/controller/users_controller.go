@@ -7,6 +7,7 @@ import (
 	"github.com/challenge/pkg/helpers"
 	"github.com/challenge/pkg/models"
 	"github.com/challenge/pkg/usecase"
+	"github.com/gastonharari/asapp/pkg/usecase"
 )
 
 // CreateUser creates a new user
