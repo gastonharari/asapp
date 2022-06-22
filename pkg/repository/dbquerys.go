@@ -10,7 +10,7 @@ import (
 
 const (
 	insertNewUserQuery = "INSERT INTO users (user , pwd) VALUES (? , ?);"
-	storeTokenQuery    = "INSERT INTO users (token) VALUES (?) WHERE user = ?;"
+	storeTokenQuery    = "UPDATE users SET token=?  WHERE user = ?;"
 	getTokenQuery      = "SELECT token FROM users WHERE user = ?;"
 	logINUserQuery     = "SELECT id, pwd FROM users WHERE id = ?;"
 )
@@ -57,13 +57,24 @@ func LoginUser(db *sql.DB, user string, request string) (int64, error) {
 }
 
 func StoreToken(db *sql.DB, user string, token string) error {
-	/*statement, _ := db.Prepare(storeTokenQuery)
-	r, err := statement.Exec(user, token)
+	statement, _ := db.Prepare(storeTokenQuery)
+	r, err := statement.Exec(token, user)
+
 	if err != nil {
 		return err
 	}
 	if rowsAffected, _ := r.RowsAffected(); rowsAffected == 0 {
 		return fmt.Errorf("no rows affected")
-	}*/
+	}
 	return nil
+}
+
+func ValidateToken(db *sql.DB, user string, tokenUser string) error {
+	var token string
+	r, err := db.Query(getTokenQuery, user)
+	if err != nil {
+		return err
+	}
+	r.Scan(&token)
+	return bcrypt.CompareHashAndPassword([]byte(token), []byte(tokenUser))
 }

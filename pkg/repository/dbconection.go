@@ -14,13 +14,14 @@ func InitDb() *sql.DB {
 	// statement, _ = database.Prepare("INSERT INTO users (user , pwd) VALUES (? , ?);")
 	// r, _ := statement.Exec("pepe", "hola")
 	// fmt.Println(r.LastInsertId())
-	rows, _ := database.Query("SELECT id, user ,pwd FROM users")
+	rows, _ := database.Query("SELECT id, user ,pwd, token FROM users")
 	var id int
 	var user string
 	var pwd string
+	var token string
 	for rows.Next() {
-		rows.Scan(&id, &user, &pwd)
-		fmt.Println(id, user, pwd)
+		rows.Scan(&id, &user, &pwd, &token)
+		fmt.Println(id, user, pwd, token)
 	}
 	return database
 }
