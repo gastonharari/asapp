@@ -10,6 +10,5 @@ import (
 func CreateNewUser(user string, password string) (int64, error) {
 	fmt.Println(user)
 	fmt.Println(password)
-	db := repository.InitDb()
-	return repository.InserNewUser(db, user, password)
+	return repository.InserNewUser(user, password)
 }

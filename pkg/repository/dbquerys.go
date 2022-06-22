@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"database/sql"
 	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -15,8 +14,8 @@ const (
 	logINUserQuery     = "SELECT id, pwd FROM users WHERE id = ?;"
 )
 
-func InitRepo(db *sql.DB) {
-	rows, _ := db.Query("SELECT id, user ,pwd FROM users")
+func InitRepo() {
+	rows, _ := DB.Query("SELECT id, user ,pwd FROM users")
 	var id int
 	var user string
 	var pwd string
@@ -26,11 +25,11 @@ func InitRepo(db *sql.DB) {
 	}
 }
 
-func InserNewUser(db *sql.DB, user string, pwd string) (int64, error) {
+func InserNewUser(user string, pwd string) (int64, error) {
 	//Create hash to save in db
 	hashedPWD, _ := bcrypt.GenerateFromPassword([]byte(pwd), 8)
 
-	statement, _ := db.Prepare(insertNewUserQuery)
+	statement, _ := DB.Prepare(insertNewUserQuery)
 	r, err := statement.Exec(user, hashedPWD)
 	if err != nil {
 		return 0, err
@@ -43,10 +42,10 @@ func InserNewUser(db *sql.DB, user string, pwd string) (int64, error) {
 	return newID, err
 }
 
-func LoginUser(db *sql.DB, user string, request string) (int64, error) {
+func LoginUser(user string, request string) (int64, error) {
 	var pwd string
 	var id int64
-	r, err := db.Query(logINUserQuery, id, user)
+	r, err := DB.Query(logINUserQuery, id, user)
 	if err != nil {
 		return 0, err
 	}
@@ -56,8 +55,8 @@ func LoginUser(db *sql.DB, user string, request string) (int64, error) {
 	return id, err
 }
 
-func StoreToken(db *sql.DB, user string, token string) error {
-	statement, _ := db.Prepare(storeTokenQuery)
+func StoreToken(user string, token string) error {
+	statement, _ := DB.Prepare(storeTokenQuery)
 	r, err := statement.Exec(token, user)
 
 	if err != nil {
@@ -69,9 +68,9 @@ func StoreToken(db *sql.DB, user string, token string) error {
 	return nil
 }
 
-func ValidateToken(db *sql.DB, user string, tokenUser string) error {
+func ValidateToken(user string, tokenUser string) error {
 	var token string
-	r, err := db.Query(getTokenQuery, user)
+	r, err := DB.Query(getTokenQuery, user)
 	if err != nil {
 		return err
 	}

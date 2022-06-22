@@ -6,18 +6,22 @@ import (
 
 	"github.com/challenge/pkg/auth"
 	"github.com/challenge/pkg/controller"
+	"github.com/challenge/pkg/repository"
 )
 
 const (
-	ServerPort = "8080"
-	CheckEndpoint = "/check"
-	UsersEndpoint = "/users"
-	LoginEndpoint = "/login"
+	ServerPort       = "8080"
+	CheckEndpoint    = "/check"
+	UsersEndpoint    = "/users"
+	LoginEndpoint    = "/login"
 	MessagesEndpoint = "/messages"
 )
 
 func main() {
 	h := controller.Handler{}
+
+	//Init the database
+	repository.InitDB()
 
 	// Configure endpoints
 	// Health
@@ -65,5 +69,5 @@ func main() {
 
 	// Start server
 	log.Println("Server started at port " + ServerPort)
-	log.Fatal(http.ListenAndServe(":" + ServerPort, nil))
+	log.Fatal(http.ListenAndServe(":"+ServerPort, nil))
 }

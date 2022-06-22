@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"database/sql"
 	"fmt"
 	"time"
 
@@ -10,14 +9,13 @@ import (
 )
 
 func LoginUser(user string, pwd string) (token string, err error) {
-	db := repository.InitDb()
-	validLogin, err := repository.LoginUser(db, user, pwd)
+	validLogin, err := repository.LoginUser(user, pwd)
 	if err != nil {
 		return "", nil
 	}
 	fmt.Println(validLogin)
 	token = geneateToken(user)
-	err = storeToken(db, user, token)
+	err = storeToken(user, token)
 	return token, err
 }
 
@@ -27,6 +25,6 @@ func geneateToken(user string) string {
 	return string(token)
 }
 
-func storeToken(db *sql.DB, user string, token string) error {
-	return repository.StoreToken(db, user, token)
+func storeToken(user string, token string) error {
+	return repository.StoreToken(user, token)
 }
