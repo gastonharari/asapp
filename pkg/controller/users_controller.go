@@ -35,6 +35,10 @@ func (h Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID := usecase.CreateNewUser(usr.User, usr.Password)
+	userID, err := usecase.CreateNewUser(usr.User, usr.Password)
+	if err != nil {
+		helpers.RespondError(w, err)
+		return
+	}
 	helpers.RespondJSON(w, models.User{ID: userID})
 }

@@ -1,5 +1,10 @@
 package models
 
 type Login struct {
-	// TODO: Implement Login model
+	Token string `json:"token"`
+}
+
+type LoginRequest struct {
+	User     string `json:"username"`
+	Password string `json:"password"`
 }
