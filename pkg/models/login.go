@@ -2,6 +2,7 @@ package models
 
 type Login struct {
 	Token string `json:"token"`
+	ID    int64  `json:"id"`
 }
 
 type LoginRequest struct {

@@ -20,8 +20,10 @@ const (
 func main() {
 	h := controller.Handler{}
 
-	//Init the database
+	//Init the database conection
 	repository.InitDB()
+
+	//repository.InternalInitDB()
 
 	// Configure endpoints
 	// Health

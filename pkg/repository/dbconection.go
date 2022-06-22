@@ -10,31 +10,28 @@ import (
 var DB *sql.DB
 
 func InitDB() {
-	_, err := GetDB()
-	if err != nil {
+	db := GetDB()
+	if db == nil {
 		panic("could not conect to the db, retry later")
 	}
 }
 
 //Singleton DB
-func GetDB() (*sql.DB, error) {
+func GetDB() *sql.DB {
 	if DB == nil {
-		database, err := sql.Open("sqlite3", "./dbtest.db")
-		if err != nil {
-			return nil, err
-		}
+		database, _ := sql.Open("sqlite3", "./dbtest.db")
 		DB = database
 	}
-	return DB, nil
+	return DB
 }
 
-func InternalInitDB(db *sql.DB) {
-	statement, _ := db.Prepare("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, user TEXT, pwd TEXT, token TEXT, UNIQUE(user));")
+func InternalInitDB() {
+	statement, _ := GetDB().Prepare("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, user TEXT, pwd TEXT, token TEXT, UNIQUE(user));")
 	statement.Exec()
 	// statement, _ = database.Prepare("INSERT INTO users (user , pwd) VALUES (? , ?);")
 	// r, _ := statement.Exec("pepe", "hola")
 	// fmt.Println(r.LastInsertId())
-	rows, _ := db.Query("SELECT id, user ,pwd, token FROM users")
+	rows, _ := GetDB().Query("SELECT id, user ,pwd, token FROM users")
 	var id int
 	var user string
 	var pwd string

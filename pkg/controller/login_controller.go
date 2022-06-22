@@ -33,12 +33,12 @@ func (h Handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := usecase.LoginUser(request.User, request.Password)
+	response, err := usecase.LoginUser(request.User, request.Password)
 
 	if err != nil {
 		helpers.RespondError(w, err)
 		return
 	}
 
-	helpers.RespondJSON(w, models.Login{Token: token})
+	helpers.RespondJSON(w, response)
 }
