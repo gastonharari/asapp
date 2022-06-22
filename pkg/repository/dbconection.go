@@ -9,11 +9,11 @@ import (
 
 func InitDb() *sql.DB {
 	database, _ := sql.Open("sqlite3", "./dbtest.db")
-	statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, user TEXT, pwd TEXT)")
+	statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, user TEXT, pwd TEXT, token TEXT, UNIQUE(user));")
 	statement.Exec()
-	/*statement, _ = database.Prepare("INSERT INTO users (user , pwd) VALUES (? , ?);")
-	r, _ := statement.Exec("pepe", "hola")
-	fmt.Println(r.LastInsertId())*/
+	// statement, _ = database.Prepare("INSERT INTO users (user , pwd) VALUES (? , ?);")
+	// r, _ := statement.Exec("pepe", "hola")
+	// fmt.Println(r.LastInsertId())
 	rows, _ := database.Query("SELECT id, user ,pwd FROM users")
 	var id int
 	var user string

@@ -7,10 +7,9 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func CreateNewUser(user string, password string) int64 {
+func CreateNewUser(user string, password string) (int64, error) {
 	fmt.Println(user)
 	fmt.Println(password)
 	db := repository.InitDb()
-	index := repository.InserNewUser(db, user, password)
-	return index
+	return repository.InserNewUser(db, user, password)
 }
